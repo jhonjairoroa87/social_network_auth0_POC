@@ -49,11 +49,12 @@
 	    }
 
 	    // auth0 get profile callback 
-	    function validateAuth0TokenCallback (err){
+	    function validateAuth0TokenCallback (err, profile){
 	        if(err != null && typeof err != 'undefined'){
 	            $('#auth0Status').text("Not logged in");
 	        }else{
 	        	$('#auth0Status').text("Logged in");
+                console.log(profile);
 	        }
 	    }
 
