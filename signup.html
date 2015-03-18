@@ -16,6 +16,7 @@
 
 	<!-- button for linkedin sign in -->
 	<button onclick="onClickedLinkedinSignInButton();">Sign in with Linkedin</button></br></br>
+    
     Logged status:
 	<p id="auth0Status">Not logged in</p></br>
     Friends count:
@@ -57,15 +58,7 @@
 	        }else{
                 var friendsCount = 0;
 	        	$('#auth0Status').text("Logged in");
-                // facebook profile structure
-                /*
-                context: Object
-                mutual_friends: Object
-                data: Array[0]
-                summary: Object
-                total_count: 722
 
-                */
                 // when the profile comes from fracebook
                 if(profile.hasOwnProperty('context')){
                     friendsCount = profile['context']['mutual_friends']['summary']['total_count']
@@ -77,11 +70,6 @@
                 }
 
                 $('#friendsCounterMessage').text(friendsCount);
-
-                
-
-                //console.log(profile);
-                //console.log("friendsCount:" + friendsCount );
 	        }
 	    }
 
