@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title> social network auth0 POC</title>
+    <!-- JS libs -->
+    <!-- jquery -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- auh0 -->
+    <script defer src="http://cdn.auth0.com/w2/auth0-4.js"></script>
+</head>
+<body>
+
+	<!-- button for facebook sign in -->
+	<button onclick="onClickedFacebookSignInButton();">Sign in with Facebook</button> </br>
+
+	<!-- button for linkedin sign in -->
+	<button onclick="onClickedLinkedinSignInButton();">Sign in with Linkedin</button>
+
+	<p id="auth0Status">Not logged in</p>
+	
+	<script type="text/javascript">
+
+		// defines auth0 global variable
+		var auth0 = null;
+
+        // executed when document in ready
+        $(document).ready(function(){
+        	
+            // instantiate auth0 object
+            auth0 = new Auth0({
+                domain: '', // add auth0 domain , e  'exampledomain.auth0.com'
+                clientID: '' //  add auth0 client id, ie 'Jwfzz4rUEobBOtpNdSB5miPjV5igu84X'
+            });
+
+            // get variables from url
+            var urlParams = getUrlVars();
+
+            // get auth0 id token value
+            var auth0IdToken = urlParams['id_token'];
+
+            // validates auth0 id token
+        	validateAuth0Token(auth0, auth0IdToken);
+        });
+
+        // validates auth0 id token
+        function validateAuth0Token (currentAuth0, auth0IdToken){
+	        currentAuth0.getProfile(auth0IdToken, validateAuth0TokenCallback)
+	    }
+
+	    // auth0 get profile callback 
+	    function validateAuth0TokenCallback (err){
+	        if(err != null && typeof err != 'undefined'){
+	            $('#auth0Status').text("Not logged in");
+	        }else{
+	        	$('#auth0Status').text("Logged in");
+	        }
+	    }
+
+        // triggered when the facebook sign in button has been clicked
+        function onClickedFacebookSignInButton() {
+        	auth0SignIn('facebook');
+            
+        }
+
+        // triggered when the linkedin sign in button has been clicked
+        function onClickedLinkedinSignInButton() {
+        	auth0SignIn('linkedin');
+        }
+
+        // call the signin method of auth0 object based on given connection
+        function auth0SignIn(connection){
+        	auth0.signin({
+              'connection': connection,
+              'response_type': 'token',
+              'redirect_uri' : 'http://localhost/social_network_auth0_POC/signup.html',
+            });
+        }
+
+        // Read a page's GET URL variables and return them as an associative array.
+        // Based (but modified) on http://snipplr.com/view/799/get-url-variables/
+		function getUrlVars(){
+		    var vars = {};
+		    var hash;
+		    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+
+		    for(var i = 0; i < hashes.length; i++)
+		    {
+		        hash = hashes[i].split('=');
+		        //vars.push(hash[0]);
+		        vars[hash[0]] = hash[1];
+		    }
+
+		    return vars;
+		}
+
+    </script>
+</body>
+</html>
